@@ -1,0 +1,491 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   SHRINGAR — global design foundation
+   All values taken verbatim from the approved design file.
+   ============================================================ */
+
+:root {
+  --brown: #5b4638;
+  --brown-dark: #4a3528;
+  --brown-darker: #3a2c22;
+  --copper: #c98f73;
+  --copper-light: #d8b08c;
+  --copper-dark: #b0735a;
+  --cream: #faf7f2;
+  --warm: #f3ece4;
+  --gold: #e8cba0;
+  --muted: #8a6a58;
+  --mid: #a88a78;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+}
+
+body {
+  font-family: "Manrope", sans-serif;
+  color: var(--brown);
+  background: var(--warm);
+  -webkit-font-smoothing: antialiased;
+  /* Safety net against sideways scroll on narrow phones. `clip` (not `hidden`)
+     is deliberate: `overflow-x: hidden` on body turns it into a scroll
+     container and silently breaks the `position: sticky` header. */
+  overflow-x: clip;
+}
+
+/* Media never bursts out of its container on small screens. */
+img,
+video {
+  max-width: 100%;
+}
+
+::selection {
+  background: rgba(201, 143, 115, 0.18);
+}
+
+/* custom scrollbar — matches the design exactly */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(201, 143, 115, 0.28);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 143, 115, 0.45);
+}
+
+/* hide scrollbars on horizontal carousels / overflow rows */
+.noscroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.noscroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================================
+   Keyframes — every animation from the approved design
+   ============================================================ */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes floaty2 {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(11px);
+  }
+}
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(20px, -18px) scale(1.06);
+  }
+  66% {
+    transform: translate(-14px, 12px) scale(0.96);
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-150px) scale(0.4);
+    opacity: 0;
+  }
+}
+@keyframes petalfall {
+  0% {
+    transform: translateY(-10%) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(560px) translateX(40px) rotate(420deg);
+    opacity: 0;
+  }
+}
+@keyframes sheen {
+  0% {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  60%,
+  100% {
+    transform: translateX(260%) skewX(-18deg);
+  }
+}
+@keyframes auraspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes huedrift {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(18deg);
+  }
+}
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+/* wishlist heart: petal burst + heart pop */
+@keyframes petalBurst {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) rotate(0deg) scale(0.2);
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--tx), var(--ty))
+      rotate(var(--r)) scale(1);
+    opacity: 0;
+  }
+}
+@keyframes heartPop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.45);
+  }
+  60% {
+    transform: scale(0.88);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* full-card flower-petal shower — petals fall from the top to the bottom
+   of the card (with a gentle horizontal sway) when an item is saved */
+@keyframes cardPetal {
+  0% {
+    transform: translate(0, -130%) rotate(0deg) scale(0.85);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--drift), 130%) rotate(var(--r)) scale(1);
+    opacity: 0;
+  }
+}
+/* soft rosy glow that washes over the card when saved */
+@keyframes cardGlow {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+/* slow cinematic zoom for video / hero slides */
+@keyframes kenburns {
+  0% {
+    transform: scale(1.04) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.18) translate(-1.5%, -1.5%);
+  }
+}
+/* slide content reveal */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* infinite marquee for the luxury brand ribbon */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* slider progress bar fill */
+@keyframes progressFill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+/* gentle sparkle twinkle */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+/* full-card flower-petal burst — petals explode outward from the centre */
+@keyframes cardPetalBurst {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) rotate(0deg) scale(0.2);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--bx), var(--by))
+      rotate(var(--r)) scale(1);
+    opacity: 0;
+  }
+}
+/* rosy glow flash that blooms from the centre of the card */
+@keyframes cardBurstGlow {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+/* expanding gold ring used for the cart success pulse */
+@keyframes cardRing {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+/* springy pop for cart buttons on success */
+@keyframes cartPop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.12);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* luxury toast entrance — glides in from the right with a soft settle */
+@keyframes toastIn {
+  0% {
+    opacity: 0;
+    transform: translateX(46px) scale(0.94);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* ============================================================
+   Animation utility classes (used directly in components so
+   the exact timing/easing from the design is preserved)
+   ============================================================ */
+.anim-fadeUp {
+  animation: fadeUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.anim-fadeIn {
+  animation: fadeIn 1s ease both;
+}
+.anim-floaty {
+  animation: floaty 6s ease-in-out infinite;
+}
+.anim-floaty2 {
+  animation: floaty2 7s ease-in-out infinite;
+}
+.anim-blob {
+  animation: blob 18s ease-in-out infinite;
+}
+.anim-pulse {
+  animation: pulse 1.8s infinite;
+}
+.anim-shimmer {
+  animation: shimmer 16s linear infinite;
+}
+.anim-auraspin {
+  animation: auraspin 30s linear infinite;
+}
+.anim-slideInRight {
+  animation: slideInRight 0.35s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.anim-petal {
+  animation: petalBurst 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+.anim-heartPop {
+  animation: heartPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.anim-cardPetal {
+  animation: cardPetal 1.35s cubic-bezier(0.37, 0, 0.63, 1) forwards;
+}
+.anim-cardGlow {
+  animation: cardGlow 1s ease forwards;
+}
+.anim-cardBurst {
+  animation: cardPetalBurst 1.05s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+.anim-cardBurstGlow {
+  animation: cardBurstGlow 0.95s ease-out forwards;
+}
+.anim-cardRing {
+  animation: cardRing 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+.anim-cartPop {
+  animation: cartPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.anim-toastIn {
+  animation: toastIn 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.anim-kenburns {
+  animation: kenburns 9s ease-out both;
+}
+.anim-slideUp {
+  animation: slideUp 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.anim-marquee {
+  animation: marquee 32s linear infinite;
+}
+.anim-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+/* hide scrollbar for horizontal luxury carousels */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* animated nav underline — exact effect from the design */
+.nav-underline {
+  padding-bottom: 3px;
+  background-image: linear-gradient(#c98f73, #c98f73);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1.5px;
+  transition: background-size 0.35s, color 0.25s;
+}
+.nav-underline:hover {
+  color: #c98f73;
+  background-size: 100% 1.5px;
+}
+
+.footer-link {
+  cursor: pointer;
+  transition: color 0.25s;
+}
+.footer-link:hover {
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .cart-label {
+    display: none;
+  }
+}

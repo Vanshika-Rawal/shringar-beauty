@@ -1,0 +1,83 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Note the exists() guard: without it, get() on a not-yet-created user doc
+    // errors out the whole evaluation. This is what breaks signup, because the
+    // very first write happens before the user doc exists.
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // users — a user reads/writes only their own doc; admins can read all.
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+
+      // On signup the user may only create THEIR OWN doc, and only with
+      // role 'user' (prevents self-granting admin).
+      allow create: if isOwner(uid)
+        && request.resource.data.role == 'user';
+
+      // Owners may edit their profile but NOT change their own role.
+      // Admins may change anything (e.g. promote a user).
+      allow update: if isAdmin()
+        || (isOwner(uid) && request.resource.data.role == resource.data.role);
+
+      allow delete: if isAdmin();
+    }
+
+    // products — public read, admin-only writes
+    match /products/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // categories — public read, admin-only writes
+    match /categories/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // cart — private to the owner
+    match /cart/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
+    // wishlist — private to the owner
+    match /wishlist/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
+    // orders — owner reads/creates their own; admins manage all
+    match /orders/{id} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // reviews — public read, signed-in users create their own
+    match /reviews/{id} {
+      allow read: if true;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin() ||
+        (isSignedIn() && resource.data.userId == request.auth.uid);
+    }
+
+    // coupons — public read (to validate at checkout), admin writes
+    match /coupons/{code} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
