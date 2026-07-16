@@ -1,0 +1,31 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rose" x1="150" y1="110" x2="360" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C98F73"/>
+      <stop offset="0.45" stop-color="#B76E79"/>
+      <stop offset="0.8" stop-color="#9C5C55"/>
+      <stop offset="1" stop-color="#7A4A44"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="70" y1="70" x2="440" y2="440" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E8CBA0"/>
+      <stop offset="0.5" stop-color="#D8B08C"/>
+      <stop offset="1" stop-color="#B76E79"/>
+    </linearGradient>
+  </defs>
+
+  <!-- cream disc + rose-gold rim -->
+  <circle cx="256" cy="256" r="242" fill="#F7ECE4"/>
+  <circle cx="256" cy="256" r="242" fill="none" stroke="url(#rim)" stroke-width="8"/>
+
+  <!-- serif S monogram -->
+  <text x="256" y="352" font-family="'Playfair Display','Times New Roman',Georgia,serif"
+        font-size="300" font-weight="600" text-anchor="middle" fill="url(#rose)">S</text>
+
+  <!-- leaf sprig -->
+  <g fill="url(#rose)">
+    <path d="M150 330c26-4 46-20 54-44-24-2-45 10-56 30-2 5-1 11 2 14z"/>
+    <path d="M132 356c22 2 42-6 54-24-20-8-42-3-56 12-4 4-3 10 2 12z"/>
+    <path d="M120 300c-4 24 4 46 22 58 8-22 3-46-12-60-4-3-9-2-10 2z"/>
+  </g>
+  <path d="M118 372c40-30 78-44 120-50" stroke="url(#rose)" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg>
